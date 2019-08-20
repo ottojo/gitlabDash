@@ -14,8 +14,7 @@
 #include "../person/Person.h"
 
 class Issue {
-public:
-
+private:
     std::string id;
     std::string link;
     std::string title;
@@ -27,15 +26,17 @@ public:
     std::vector<Person> assignees;
     Person assignee;
 
-    std::string getTitle() const;
+public:
 
-    std::string getAuthor() const;
+    [[nodiscard]] std::string getTitle() const;
 
-    std::string getAge() const;
+    [[nodiscard]] std::string getAuthor() const;
 
-    std::string getAssignee() const;
+    [[nodiscard]] std::string getAge() const;
 
-    std::string getDescription() const;
+    [[nodiscard]] std::string getAssignee() const;
+
+    [[nodiscard]] std::string getDescription() const;
 
     static std::vector<Issue> ParseIssues(const std::string &xml);
 };
