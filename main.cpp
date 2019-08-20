@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     // first argument: port
     if (argc < 2) {
         std::cerr << "please specify port" << std::endl;
+        return 1;
     }
 
     // https://git.spatz.wtf/spatzenhirn/2020/issues.atom?feed_token=eJ7JpgE3Y4GcbBfJsQaW&state=opened
