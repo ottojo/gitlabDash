@@ -27,14 +27,24 @@ std::shared_ptr<mstch::map> createPage(const std::vector<Issue> &issues) {
     return page;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    // first argument: port
+    if (argc < 2) {
+        std::cerr << "please specify port" << std::endl;
+    }
+
     // https://git.spatz.wtf/spatzenhirn/2020/issues.atom?feed_token=eJ7JpgE3Y4GcbBfJsQaW&state=opened
     // https://git.spatz.wtf/spatzenhirn/2020/issues.atom?feed_token=eJ7JpgE3Y4GcbBfJsQaW&state=closed
 
+    std::ifstream ifs("index.html");
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+                        (std::istreambuf_iterator<char>()));
+
+
     httplib::Server srv;
 
-    srv.Get("/dash", [](const httplib::Request &req, httplib::Response &res) {
-
+    srv.Get("/", [content](const httplib::Request &req, httplib::Response &res) {
 
         httplib::SSLClient cli("git.spatz.wtf", 443);
         //TODO fix ssl
@@ -50,15 +60,10 @@ int main() {
 
         auto page = createPage(openIssues);
 
-        // TODO dont read file on every request
-        std::ifstream ifs("index.html");
-        std::string content((std::istreambuf_iterator<char>(ifs)),
-                            (std::istreambuf_iterator<char>()));
-
         res.set_content(mstch::render(content, *page), "text/html");
     });
 
-    srv.listen("0.0.0.0", 8080);
+    srv.listen("0.0.0.0", std::stoi(argv[1]));
 
     return 0;
 }
