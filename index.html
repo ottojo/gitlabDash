@@ -27,18 +27,18 @@
 <div class="flexbox">
     {{#issues}}
     <div style="width: 33.33333%; padding: 10px ">
-        <div class="card">
+        <div class="card {{#isOverdue}}text-white bg-danger{{/isOverdue}}">
             <h5 class="card-header">Issue</h5>
             <div class="card-body">
                 <h5 class="card-title">{{title}}</h5>
                 <p class="card-text">{{description}}</p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Author: {{author}}</li>
-                <li class="list-group-item">Assignee: {{assignee}}</li>
+                <li class="list-group-item {{#isOverdue}}text-white bg-danger{{/isOverdue}}">Author: {{author}}</li>
+                <li class="list-group-item {{#isOverdue}}text-white bg-danger{{/isOverdue}}">Assignee: {{assignee}}</li>
             </ul>
-            <div class="card-footer text-muted">
-                {{age}}
+            <div class="card-footer {{#isOverdue}}text-white bg-danger{{/isOverdue}}">
+                {{dueDate}}
             </div>
         </div>
     </div>

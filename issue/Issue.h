@@ -16,19 +16,21 @@
 class Issue {
 public:
     Issue(std::string id, std::string link, std::string title,
-          const std::chrono::system_clock::time_point &lastUpdated, Person author, std::string summary,
+          std::chrono::system_clock::time_point lastUpdated, Person author, std::string summary,
           std::string description, std::vector<std::string> labels,
-          std::vector<Person> assignees, Person assignee);
+          std::vector<Person> assignees, Person assignee, std::optional<std::chrono::system_clock::time_point> dueDate);
 
     [[nodiscard]] const std::string &getTitle() const;
 
     [[nodiscard]] const std::string &getAuthor() const;
 
-    [[nodiscard]] std::string getAge() const;
+    [[nodiscard]] std::string getDueDate() const;
 
     [[nodiscard]] const std::string &getAssignee() const;
 
     [[nodiscard]] const std::string &getDescription() const;
+
+    [[nodiscard]] bool isOverdue() const;
 
     static std::vector<Issue> ParseIssues(const std::string &xml);
 
@@ -43,6 +45,7 @@ private:
     std::vector<std::string> labels;
     std::vector<Person> assignees;
     Person assignee;
+    std::optional<std::chrono::system_clock::time_point> dueDate;
 };
 
 

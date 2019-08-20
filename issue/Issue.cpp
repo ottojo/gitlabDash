@@ -84,8 +84,16 @@ std::vector<Issue> Issue::ParseIssues(const std::string &xml) {
         }
         Person assignee(assigneeName, assigneeEmail);
 
+        auto dueDateElement = entry->FirstChildElement("due_date");
+        std::optional<std::chrono::system_clock::time_point> dueDate;
+        if (dueDateElement != nullptr) {
+            std::tm dueDateTime = {};
+            std::stringstream(dueDateElement->GetText()) >> std::get_time(&dueDateTime, "%Y-%m-%d");
+            dueDate = std::chrono::system_clock::from_time_t(std::mktime(&dueDateTime));
+        }
+
         issues.emplace_back(id, link, title, lastUpdated, author, summary, description, labelsList, assigneeList,
-                            assignee);
+                               assignee, dueDate);
     }
 
     return issues;
@@ -108,20 +116,38 @@ const std::string &Issue::getAssignee() const {
     return assignee.getName();
 }
 
-std::string Issue::getAge() const {
-    std::time_t t = std::chrono::system_clock::to_time_t(lastUpdated);
-    return std::ctime(&t);
+std::string Issue::getDueDate() const {
+    if (dueDate.has_value()) {
+        std::time_t t = std::chrono::system_clock::to_time_t(*dueDate);
+        auto localtime = std::localtime(&t);
+        std::stringstream ss;
+        ss << std::put_time(localtime, "%d.%m.%Y");
+        return ss.str();
+    } else {
+        return std::string();
+    }
+}
+
+bool Issue::isOverdue() const {
+    if (!dueDate.has_value()) {
+        return false;
+    }
+    return std::chrono::system_clock::now() < *dueDate;
 }
 
 Issue::Issue(std::string id, std::string link, std::string title,
-             const std::chrono::system_clock::time_point &lastUpdated, Person author, std::string summary,
+             std::chrono::system_clock::time_point lastUpdated, Person author, std::string summary,
              std::string description, std::vector<std::string> labels,
-             std::vector<Person> assignees, Person assignee) : id(std::move(id)), link(std::move(link)),
-                                                               title(std::move(title)),
-                                                               lastUpdated(lastUpdated),
-                                                               author(std::move(author)),
-                                                               summary(std::move(summary)),
-                                                               description(std::move(description)),
-                                                               labels(std::move(labels)),
-                                                               assignees(std::move(assignees)),
-                                                               assignee(std::move(assignee)) {}
+             std::vector<Person> assignees, Person assignee,
+             std::optional<std::chrono::system_clock::time_point> dueDate) :
+        id(std::move(id)),
+        link(std::move(link)),
+        title(std::move(title)),
+        lastUpdated(lastUpdated),
+        author(std::move(author)),
+        summary(std::move(summary)),
+        description(std::move(description)),
+        labels(std::move(labels)),
+        assignees(std::move(assignees)),
+        assignee(std::move(assignee)),
+        dueDate(std::move(dueDate)) {}
