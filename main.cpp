@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
         //TODO fix ssl
         cli.enable_server_certificate_verification(false);
 
-        auto response = cli.Get("/jonasotto/test/issues.atom?feed_token=eJ7JpgE3Y4GcbBfJsQaW&state=opened");
+        auto response = cli.Get("/spatzenhirn/2020/issues.atom?feed_token=eJ7JpgE3Y4GcbBfJsQaW&state=opened");
         if (!response || response->status != 200) {
             std::cerr << "Error getting RSS feed" << std::endl;
             return;
