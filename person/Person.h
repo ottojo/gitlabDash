@@ -10,9 +10,17 @@
 
 
 #include <string>
+#include <utility>
 
 class Person {
 public:
+    Person(std::string n, std::string e) : name(std::move(n)), email(std::move(e)) {};
+
+    [[nodiscard]] const std::string &getName() const;
+
+    [[nodiscard]] const std::string &getEmail() const;
+
+private:
     std::string name;
     std::string email;
 };

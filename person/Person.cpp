@@ -6,3 +6,11 @@
  */
 
 #include "Person.h"
+
+const std::string &Person::getName() const {
+    return name;
+}
+
+const std::string &Person::getEmail() const {
+    return email;
+}
