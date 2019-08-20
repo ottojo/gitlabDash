@@ -1,0 +1,12 @@
+[submodule "cpr"]
+	path = cpr
+	url = git@github.com:whoshuu/cpr.git
+[submodule "tinyxml2"]
+	path = tinyxml2
+	url = git@github.com:leethomason/tinyxml2.git
+[submodule "mstch"]
+	path = mstch
+	url = git@github.com:no1msd/mstch.git
+[submodule "cpp-httplib"]
+	path = cpp-httplib
+	url = git@github.com:yhirose/cpp-httplib.git
