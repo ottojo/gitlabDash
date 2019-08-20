@@ -62,21 +62,25 @@ std::vector<Issue> Issue::ParseIssues(const std::string &xml) {
         auto assignees = entry->FirstChildElement("assignees");
 
         std::vector<Person> assigneeList;
-        for (auto assignee = assignees->FirstChildElement("assignee");
-             assignee != nullptr; assignee = assignee->NextSiblingElement("assignees")) {
-            std::string name = assignee->FirstChildElement("name")->GetText();
-            std::string email;
-            if (assignee->FirstChildElement("email")->GetText() != nullptr) {
-                email = assignee->FirstChildElement("email")->GetText();
+        if (assignees != nullptr) {
+            for (auto assignee = assignees->FirstChildElement("assignee");
+                 assignee != nullptr; assignee = assignee->NextSiblingElement("assignees")) {
+                std::string name = assignee->FirstChildElement("name")->GetText();
+                std::string email;
+                if (assignee->FirstChildElement("email")->GetText() != nullptr) {
+                    email = assignee->FirstChildElement("email")->GetText();
+                }
+                assigneeList.emplace_back(name, email);
             }
-            assigneeList.emplace_back(name, email);
         }
-
         auto assigneeElement = entry->FirstChildElement("assignee");
-        std::string assigneeName = assigneeElement->FirstChildElement("name")->GetText();
+        std::string assigneeName;
         std::string assigneeEmail;
-        if (assigneeElement->FirstChildElement("email")->GetText() != nullptr) {
-            assigneeEmail = assigneeElement->FirstChildElement("email")->GetText();
+        if (assigneeElement != nullptr) {
+            assigneeName = assigneeElement->FirstChildElement("name")->GetText();
+            if (assigneeElement->FirstChildElement("email")->GetText() != nullptr) {
+                assigneeEmail = assigneeElement->FirstChildElement("email")->GetText();
+            }
         }
         Person assignee(assigneeName, assigneeEmail);
 

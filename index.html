@@ -6,33 +6,42 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
         * {
-            font-size: 20px;
+            font-size: 16px;
             line-height: 2;
+        }
+
+        .flexbox {
+            display: flex; /* or inline-flex */
+            flex-flow: row wrap;
+            align-items: stretch;
+        }
+
+        .card {
+            width: 100%;
         }
     </style>
     <title>Dashboard</title>
 </head>
 
 <body>
-
-<div class="row" id="mainContainer">
+<div class="flexbox">
     {{#issues}}
-        <div class="col-4">
-            <div class="card w-100">
-                <h5 class="card-header">Issue</h5>
-                <div class="card-body">
-                    <h5 class="card-title">{{title}}</h5>
-                    <p class="card-text">{{description}}</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Author: {{author}}</li>
-                    <li class="list-group-item">Assignee: {{assignee}}</li>
-                </ul>
-                <div class="card-footer text-muted">
-                    {{age}}
-                </div>
+    <div style="width: 33.33333%; padding: 10px ">
+        <div class="card">
+            <h5 class="card-header">Issue</h5>
+            <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <p class="card-text">{{description}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Author: {{author}}</li>
+                <li class="list-group-item">Assignee: {{assignee}}</li>
+            </ul>
+            <div class="card-footer text-muted">
+                {{age}}
             </div>
         </div>
+    </div>
     {{/issues}}
 </div>
 </body>
