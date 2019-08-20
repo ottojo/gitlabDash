@@ -151,3 +151,7 @@ Issue::Issue(std::string id, std::string link, std::string title,
         assignees(std::move(assignees)),
         assignee(std::move(assignee)),
         dueDate(std::move(dueDate)) {}
+
+const std::vector<std::string> &Issue::getLabels() const {
+    return labels;
+}

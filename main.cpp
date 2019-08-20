@@ -14,14 +14,18 @@ std::shared_ptr<mstch::map> createPage(const std::vector<Issue> &issues) {
     mstch::array issueArray;
 
     for (const Issue &issue: issues) {
+        mstch::array labels;
+        for (std::string label : issue.getLabels()) {
+            labels.push_back(mstch::map{{"name", label}});
+        }
 
         issueArray.push_back(mstch::map{{"title",       issue.getTitle()},
                                         {"description", issue.getDescription()},
                                         {"author",      issue.getAuthor()},
                                         {"assignee",    issue.getAssignee()},
                                         {"dueDate",     issue.getDueDate()},
-                                        {"isOverdue",   issue.isOverdue()}});
-
+                                        {"isOverdue",   issue.isOverdue()},
+                                        {"labels",      labels}});
     }
     (*page)["issues"] = issueArray;
 

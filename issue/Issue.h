@@ -32,6 +32,8 @@ public:
 
     [[nodiscard]] bool isOverdue() const;
 
+    [[nodiscard]] const std::vector<std::string> &getLabels() const;
+
     static std::vector<Issue> ParseIssues(const std::string &xml);
 
 private:

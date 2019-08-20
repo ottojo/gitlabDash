@@ -36,6 +36,11 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item {{#isOverdue}}text-white bg-danger{{/isOverdue}}">Author: {{author}}</li>
                 <li class="list-group-item {{#isOverdue}}text-white bg-danger{{/isOverdue}}">Assignee: {{assignee}}</li>
+                <li class="list-group-item {{#isOverdue}}text-white bg-danger{{/isOverdue}}">
+                    {{#labels}}
+                        <span class="badge badge-pill badge-primary">{{name}}</span>
+                    {{/labels}}
+                </li>
             </ul>
             <div class="card-footer {{#isOverdue}}text-white bg-danger{{/isOverdue}}">
                 {{dueDate}}
