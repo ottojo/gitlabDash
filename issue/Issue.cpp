@@ -132,7 +132,7 @@ bool Issue::isOverdue() const {
     if (!dueDate.has_value()) {
         return false;
     }
-    return std::chrono::system_clock::now() < *dueDate;
+    return std::chrono::system_clock::now() > *dueDate;
 }
 
 Issue::Issue(std::string id, std::string link, std::string title,
