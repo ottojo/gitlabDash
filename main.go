@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/xanzy/go-gitlab"
+	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 )
@@ -15,6 +16,8 @@ func main() {
 	projectName := flag.String("projectName", "spatzenhirn/2020", "GitLab projectName")
 	token := flag.String("token", "", "Personal Access Token")
 	domain := flag.String("domain", "dash.otto.cool", "Domain name for TLS certificate")
+	tlsCache := flag.String("tlsCache", "/var/www/.cache", "Cache directory for TLS certificate")
+
 	flag.Parse()
 
 	git := gitlab.NewClient(nil, *token)
@@ -59,9 +62,13 @@ func main() {
 		c.HTML(http.StatusOK, "mergeRequests.html", MergeRequestPage{MergeRequests: requests})
 	})
 
-	go log.Fatal(http.ListenAndServe(":http", http.HandlerFunc(redirect)))
+	m := &autocert.Manager{
+		Cache:      autocert.DirCache(*tlsCache),
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist(*domain),
+	}
 
-	log.Fatal(autotls.Run(router, *domain))
+	log.Fatal(autotls.RunWithManager(router, m))
 }
 
 func redirect(w http.ResponseWriter, req *http.Request) {
