@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/xanzy/go-gitlab"
 	"log"
@@ -57,6 +58,6 @@ func main() {
 		c.HTML(http.StatusOK, "mergeRequests.html", MergeRequestPage{MergeRequests: requests})
 	})
 
-	log.Fatal(r.Run())
+	log.Fatal(autotls.Run(r, "dash.otto.cool"))
 
 }
