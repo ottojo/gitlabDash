@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/xanzy/go-gitlab"
+	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 )
@@ -58,6 +58,22 @@ func main() {
 		c.HTML(http.StatusOK, "mergeRequests.html", MergeRequestPage{MergeRequests: requests})
 	})
 
-	log.Fatal(autotls.Run(r, "dash.otto.cool"))
+	m := autocert.Manager{
+		HostPolicy: autocert.HostWhitelist("dash.otto.cool"),
+	}
 
+	s := &http.Server{
+		Addr:      ":https",
+		TLSConfig: m.TLSConfig(),
+		Handler:   r,
+	}
+
+	go log.Fatal(http.ListenAndServe(":http", m.HTTPHandler(http.HandlerFunc(redirect))))
+
+	log.Fatal(s.ListenAndServeTLS("", ""))
+}
+
+func redirect(w http.ResponseWriter, req *http.Request) {
+	target := "https://" + req.Host + req.URL.Path
+	http.Redirect(w, req, target, http.StatusMovedPermanently)
 }
