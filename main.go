@@ -70,8 +70,3 @@ func main() {
 
 	log.Fatal(autotls.RunWithManager(router, m))
 }
-
-func redirect(w http.ResponseWriter, req *http.Request) {
-	target := "https://" + req.Host + req.URL.Path
-	http.Redirect(w, req, target, http.StatusMovedPermanently)
-}
