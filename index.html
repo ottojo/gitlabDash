@@ -12,7 +12,7 @@
 
         .flexbox {
             display: flex; /* or inline-flex */
-            flex-flow: row wrap;
+            flex-flow: row nowrap;
             align-items: stretch;
         }
 
@@ -26,7 +26,7 @@
 <body>
 <div class="flexbox">
     {{#issues}}
-    <div style="width: 33.33333%; padding: 10px ">
+    <div style="width: 25%; padding: 10px ">
         <div class="card {{#isOverdue}}text-white bg-danger{{/isOverdue}}">
             <h5 class="card-header">Issue</h5>
             <div class="card-body">
