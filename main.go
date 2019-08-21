@@ -59,7 +59,9 @@ func main() {
 	})
 
 	m := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
 		HostPolicy: autocert.HostWhitelist("dash.otto.cool"),
+		Cache:      autocert.DirCache("/var/www/.cache"),
 	}
 
 	s := &http.Server{
