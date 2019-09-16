@@ -26,20 +26,22 @@
 
 <body>
 <div class="flexbox">
-    {{- /*gotype: ottojo/gitlabDash.MergeRequestPage*/ -}}
+    {{- /*gotype: github.com/ottojo/gitlabDash.MergeRequestPage*/ -}}
     {{range .MergeRequests}}
         <div style="padding: 10px ">
             <div class="card {{.ColorClasses}}">
                 <h5 class="card-header">Merge Request</h5>
                 <div class="card-body">
                     <h5 class="card-title">{{.Title}}</h5>
-                    <p class="card-text">{{.Description}}</p>
+                    <div class="card-text">{{.GetDescriptionHTML}}</div>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item {{.ColorClasses}}">
                         Author: {{.Author.Name}}</li>
-                    <li class="list-group-item {{.ColorClasses}}">
-                        Assignee: {{.Assignee.Name}}</li>
+                    {{if .Assignee}}
+                        <li class="list-group-item {{.ColorClasses}}">
+                            Assignee: {{.Assignee.Name}}</li>
+                    {{end}}
                     <li class="list-group-item {{.ColorClasses}}">
                         {{range .Labels}}
                             <span class="badge badge-pill badge-primary">{{.}}</span>
