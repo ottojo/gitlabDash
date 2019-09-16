@@ -1,7 +1,10 @@
 package main
 
 import (
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/xanzy/go-gitlab"
+	"gopkg.in/russross/blackfriday.v2"
+	"html/template"
 	"time"
 )
 
@@ -16,4 +19,9 @@ func (i *Issue) IsOverdue() bool {
 		return false
 	}
 	return time.Now().After(time.Time(*i.DueDate))
+}
+
+func (i *Issue) GetDescriptionHTML() template.HTML {
+	unsafeHTMLfromMarkdown := blackfriday.Run([]byte(i.Description))
+	return template.HTML(bluemonday.UGCPolicy().SanitizeBytes(unsafeHTMLfromMarkdown))
 }
