@@ -17,6 +17,7 @@ func main() {
 	token := flag.String("token", "", "Personal Access Token")
 	domain := flag.String("domain", "dash.otto.cool", "Domain name for TLS certificate")
 	tlsCache := flag.String("tlsCache", "/var/www/.cache", "Cache directory for TLS certificate")
+	useTls := flag.Bool("useTls", true, "Use TLS")
 
 	flag.Parse()
 
@@ -62,11 +63,15 @@ func main() {
 		c.HTML(http.StatusOK, "mergeRequests.html", MergeRequestPage{MergeRequests: requests})
 	})
 
-	m := &autocert.Manager{
-		Cache:      autocert.DirCache(*tlsCache),
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist(*domain),
-	}
+	if *useTls {
+		m := &autocert.Manager{
+			Cache:      autocert.DirCache(*tlsCache),
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist(*domain),
+		}
 
-	log.Fatal(autotls.RunWithManager(router, m))
+		log.Fatal(autotls.RunWithManager(router, m))
+	} else {
+		log.Fatal(router.Run())
+	}
 }
